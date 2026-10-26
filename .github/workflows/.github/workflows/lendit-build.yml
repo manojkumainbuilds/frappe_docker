@@ -1,0 +1,31 @@
+
+name: Build LendIt Frappe Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps.json"
+      - ".github/workflows/lendit-build.yml"
+      - "images/layered/Containerfile"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-image:
+    uses: frappe/frappe_docker/.github/workflows/app-build-image.yml@main
+    with:
+      app_name: lendit
+      app_repo: manojkumainbuilds/lendit-backend
+      app_ref: "16"
+      frappe_ref: version-16
+      frappe_image_prefix: ghcr.io/frappe
+      image_name: ghcr.io/manojkumainbuilds/lendit
+      image_tag: latest
+      registry: ghcr.io
+      push: true
+      platforms: linux/amd64
